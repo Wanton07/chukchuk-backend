@@ -3,6 +3,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 import os
 import gspread
 from datetime import datetime
+import uuid
 
 # Local modules
 from state import start_conversation, get_state, advance_step, reset_state
@@ -12,7 +13,8 @@ app = Flask(__name__)
 
 # Google Sheets setup
 gc = gspread.service_account(filename="/etc/secrets/credentials.json")
-sheet = gc.open("ChukChuk Logs").sheet1
+workbook = gc.open("ChukChuk Logs")
+session_sheet = workbook.worksheet("Session Logs")
 
 # Keywords to trigger Toxic flow
 toxic_keywords = ['toxic', 'abuse', 'gaslight', 'manipulated', 'unsafe', 'hurt me']
@@ -59,8 +61,19 @@ def incoming_message():
             resp.message(toxic.get_reflection())
             reset_state(from_number)
 
-        # ✅ Log to Google Sheet
-        sheet.append_row([timestamp, from_number, "toxic", f"Step {current_step}", incoming_msg])
+        # ✅ Structured Log to "Session Logs" Sheet
+        session_id = f"{from_number}-{state['type']}-sess"
+        question_asked = toxic.get_question(current_step - 1)
+
+        session_sheet.append_row([
+            timestamp,
+            from_number,
+            session_id,
+            state["type"],
+            current_step,
+            question_asked,
+            incoming_msg
+        ])
         return str(resp)
 
     # DEFAULT FALLBACK
