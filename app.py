@@ -16,7 +16,7 @@ gc = gspread.service_account(filename="/etc/secrets/credentials.json")
 workbook = gc.open("ChukChuk Logs")
 session_sheet = workbook.worksheet("Session Logs")
 
-# Keywords to trigger Toxic flow
+# Toxic keywords to trigger the flow
 toxic_keywords = ['toxic', 'abuse', 'gaslight', 'manipulated', 'unsafe', 'hurt me']
 
 def detect_toxic_keywords(message):
@@ -27,18 +27,29 @@ def incoming_message():
     from_number = request.values.get('From', '')
     incoming_msg = request.values.get('Body', '').lower()
     timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-
     resp = MessagingResponse()
 
-    # ESCALATION CHECK
+    # Fetch session state
+    state = get_state(from_number)
+    session_id = f"{from_number}-pending-sess"
+
+    # ✅ Log all incoming messages, even from unknown users
+    session_sheet.append_row([
+        timestamp,
+        from_number,
+        session_id,
+        "unknown",
+        "0",
+        "initial",
+        incoming_msg
+    ])
+
+    # Emergency escalation check
     if any(phrase in incoming_msg for phrase in ['want to die', 'end it all', 'kill myself']):
         resp.message("You’re feeling something very heavy right now 🐰. Please consider speaking to someone trained to help:\n📞 iCall Helpline (9152987821)\nYou are not alone.")
         return str(resp)
 
-    # STATE CHECK
-    state = get_state(from_number)
-
-    # START TOXIC FLOW
+    # Start toxic flow if keywords match and no session exists
     if state is None and detect_toxic_keywords(incoming_msg):
         start_conversation(from_number, "toxic")
         first_q = toxic.get_question(0)
@@ -49,7 +60,7 @@ def incoming_message():
         resp.message(reply)
         return str(resp)
 
-    # CONTINUE TOXIC FLOW
+    # Continue toxic flow if session is ongoing
     if state and state["type"] == "toxic":
         advance_step(from_number, incoming_msg)
         current_step = get_state(from_number)["step"]
@@ -61,7 +72,6 @@ def incoming_message():
             resp.message(toxic.get_reflection())
             reset_state(from_number)
 
-        # ✅ Structured Log to "Session Logs" Sheet
         session_id = f"{from_number}-{state['type']}-sess"
         question_asked = toxic.get_question(current_step - 1)
 
@@ -76,6 +86,6 @@ def incoming_message():
         ])
         return str(resp)
 
-    # DEFAULT FALLBACK
+    # Default fallback
     resp.message("Hi, I’m ChukChuk 🐰 your breakup buddy. Just tell me how you're feeling.")
     return str(resp)
