@@ -1,19 +1,20 @@
-import json
-import base64
-import os
-from oauth2client.service_account import ServiceAccountCredentials
-import gspread
+user_states = {}
 
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+def start_conversation(user_id, flow_type):
+    user_states[user_id] = {
+        "type": flow_type,
+        "step": 0,
+        "responses": []
+    }
 
-# Load credentials from base64 env var
-creds_json = os.environ.get("GOOGLE_CREDENTIALS_B64")
-if not creds_json:
-    raise Exception("Missing GOOGLE_CREDENTIALS_B64 in environment variables")
+def get_state(user_id):
+    return user_states.get(user_id, None)
 
-creds_dict = json.loads(base64.b64decode(creds_json))
-creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-client = gspread.authorize(creds)
+def advance_step(user_id, response):
+    if user_id in user_states:
+        user_states[user_id]["responses"].append(response)
+        user_states[user_id]["step"] += 1
 
-# Sheet connection (optional fallback sheet name here)
-sheet = client.open("ChukChuk Logs").sheet1
+def reset_state(user_id):
+    if user_id in user_states:
+        del user_states[user_id]
