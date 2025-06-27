@@ -1,27 +1,25 @@
-def get_questions():
-    return [
-        "😶‍🌫️ When did you first feel ghosted, and what was the situation?",
-        "🧠 What thoughts came to your mind when they started pulling away?",
-        "💬 Did you try to communicate your feelings or ask what happened?",
-        "🧍‍♂️ How did their silence make you feel about yourself?",
-        "📉 Have you started doubting your worth or actions after this?",
-        "🔄 Have you experienced similar disappearances before?",
-        "👀 What would you want them to understand if they read this?",
-        "🪞 If a close friend was in your place, what would you tell them?",
-        "⏳ What do you fear will happen if you never get closure?",
-        "🌱 What small act can you do today to reclaim your sense of calm?"
-    ]
+questions = [
+    "👻 How long has it been since they last responded?",
+    "🧩 Before the silence, did anything feel off or distant?",
+    "📉 Have they ever communicated patterns of pulling away?",
+    "📱 How often are you checking your phone for a reply?",
+    "⏳ Does this silence feel emotionally safe to wait in?",
+    "🔄 If they returned now, would you still feel respected?",
+    "🧠 Are you blaming yourself for their lack of response?",
+    "🚩 Have they ghosted you or others in the past?",
+    "🧭 What would it mean to choose peace over wondering?",
+    "🪞 How would someone who values you behave differently?"
+]
 
-def get_intro():
-    return (
-        "Hey, ghosting hurts. It's confusing when someone disappears without a word. 😶‍🌫️\n"
-        "But you don’t have to figure it all out in one go.\n"
-        "Let’s go step by step—no judgment, just clarity."
-    )
-
-def get_outro():
-    return (
-        "Thank you for reflecting. Ghosting can leave us with too many unanswered questions.\n"
-        "But today, you chose to explore your emotions instead of ignoring them.\n"
-        "And that’s a powerful beginning. 💛"
-    )
+replies = [
+    "Ghosting hurts because it interrupts the narrative without warning.",
+    "Silence is information. It tells you what words haven’t.",
+    "Patterns reveal more than promises. Look at the past, not potential.",
+    "If your phone becomes the source of stress, your mind deserves a break.",
+    "Waiting becomes painful when it’s unacknowledged. You deserve clarity.",
+    "Respect doesn’t vanish. If it did, it wasn’t deep to begin with.",
+    "Their silence is not your failure. It’s their avoidance.",
+    "Repeated ghosting is emotional immaturity in disguise.",
+    "Choosing peace is powerful. Wondering keeps you tethered to hurt.",
+    "People who value you make sure you know it. Loudly, clearly, consistently."
+]
