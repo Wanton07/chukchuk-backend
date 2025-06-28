@@ -1,25 +1,27 @@
 questions = [
-    "👻 How long has it been since they last responded?",
-    "🧩 Before the silence, did anything feel off or distant?",
-    "📉 Have they ever communicated patterns of pulling away?",
-    "📱 How often are you checking your phone for a reply?",
-    "⏳ Does this silence feel emotionally safe to wait in?",
-    "🔄 If they returned now, would you still feel respected?",
-    "🧠 Are you blaming yourself for their lack of response?",
-    "🚩 Have they ghosted you or others in the past?",
-    "🧭 What would it mean to choose peace over wondering?",
-    "🪞 How would someone who values you behave differently?"
+    "👻 Did the silence feel sudden or was it slowly growing?",
+    "🧠 Are you stuck asking why, without any real answer?",
+    "💬 Did you try reaching out after being ghosted? What happened?",
+    "📉 How has this experience affected your self-worth?",
+    "🔎 Are you blaming yourself for their silence?",
+    "🌪️ Does the lack of closure keep pulling you back emotionally?",
+    "🛑 What would you say to them now if they actually listened?",
+    "📱 Does seeing their profile or presence online trigger you?",
+    "🧭 What does closure look like when the other person won’t offer it?",
+    "🌤️ What small truth helps you breathe a little easier right now?"
 ]
 
 replies = [
-    "Ghosting hurts because it interrupts the narrative without warning.",
-    "Silence is information. It tells you what words haven’t.",
-    "Patterns reveal more than promises. Look at the past, not potential.",
-    "If your phone becomes the source of stress, your mind deserves a break.",
-    "Waiting becomes painful when it’s unacknowledged. You deserve clarity.",
-    "Respect doesn’t vanish. If it did, it wasn’t deep to begin with.",
-    "Their silence is not your failure. It’s their avoidance.",
-    "Repeated ghosting is emotional immaturity in disguise.",
-    "Choosing peace is powerful. Wondering keeps you tethered to hurt.",
-    "People who value you make sure you know it. Loudly, clearly, consistently."
+    "Ghosting feels like emotional theft. You deserved better communication.",
+    "The brain craves reasons. But silence doesn’t mean it was your fault.",
+    "Reaching out shows your heart — their response shows their character.",
+    "Your value isn’t tied to someone else’s absence.",
+    "You’re not the reason they vanished. That’s their unfinished work.",
+    "Closure isn’t something they give — it’s something you build.",
+    "Even imagined conversations help heal. Speak your truth.",
+    "Triggers are data, not weakness. Let’s use them gently.",
+    "You don’t need their words to move on. Your own voice is enough.",
+    "You’re healing in silence what they didn’t even face. That’s power."
 ]
+def get_question(step):
+    return questions[step] if step < len(questions) else None

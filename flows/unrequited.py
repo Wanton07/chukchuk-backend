@@ -1,25 +1,27 @@
 questions = [
-    "💘 What is it about this person that made you feel so deeply for them?",
-    "📉 Do you feel your efforts and emotions were met equally in return?",
-    "🪞 When they respond to you — or don’t — how does that affect your sense of self?",
-    "🌧️ Are you often left feeling confused, anxious, or emotionally drained after interactions?",
-    "🌱 Have you changed any part of your personality or lifestyle hoping they’d notice or care more?",
-    "🔍 What do you think you’re truly seeking — their love, or a sense of being chosen?",
-    "🧠 When you reflect on your thoughts, do you think about them more or yourself more?",
-    "🧩 Does this relationship help you grow or keep you circling the same emotional space?",
-    "⏳ If they never reciprocate the way you hope, what would staying in this space cost you?",
-    "🌄 What would healing and moving forward — not to forget them, but for you — look like?"
+    "😔 How long have you carried feelings that weren’t returned?",
+    "🎢 Have they given mixed signals or been clear about their stance?",
+    "🎭 Do you ever feel like you’re performing to win their attention?",
+    "🪞 How has this dynamic affected your self-esteem or confidence?",
+    "🔄 Do you keep hoping something might change, or do you know deep down?",
+    "🧘 What kind of love do you want — mutual, calm, and certain?",
+    "🧃 Have you been romanticizing moments that were never fully real?",
+    "🔒 Have you felt stuck, waiting for their emotional availability?",
+    "🌅 What would it feel like to open space for someone who chooses you?",
+    "📣 What do you need to hear right now to let go, even a little?"
 ]
 
 replies = [
-    "You cared deeply — that matters. Let’s explore where that care is taking you.",
-    "One-sided energy feels heavy. Noticing imbalance is a strength, not a weakness.",
-    "Your self-worth shouldn't swing based on their attention. Let's protect that space.",
-    "Your emotions are your compass. Let’s tune into what they’re pointing toward.",
-    "You don’t need to shape-shift to be worthy. Let’s rediscover your original self.",
-    "Sometimes we chase being chosen instead of being cherished. You deserve both.",
-    "Your thoughts matter — are they nurturing you or exhausting you?",
-    "Staying stuck in loops can feel familiar. Let’s begin moving, even a little.",
-    "You deserve return on emotional investment. Let’s understand your emotional budget.",
-    "Healing isn’t forgetting — it’s freeing your heart to beat fully again 💛"
+    "Longing is real pain. It deserves just as much space as any breakup.",
+    "Mixed signals create confusion, not chemistry. You deserve clarity.",
+    "You shouldn’t have to prove your worth to be loved.",
+    "Your value doesn’t shrink because someone didn’t see it.",
+    "The quiet truth you carry deserves to be honored gently.",
+    "Love should feel safe and shared. Let’s start with wanting *that*.",
+    "It’s okay to admit what was imagined. Closure starts with honesty.",
+    "Stuckness is your cue. You don’t need permission to move forward.",
+    "Being chosen — fully and freely — is worth waiting for.",
+    "Sometimes, healing starts with giving yourself the goodbye they never gave."
 ]
+def get_question(step):
+    return questions[step] if step < len(questions) else None
