@@ -23,3 +23,13 @@ replies = [
     "Time helps measure clarity. Imagining the future helps your inner voice speak up.",
     "That vision of freedom is powerful. Let’s walk toward it step by step, with care."
 ]
+
+def get_question(step):
+    if step < len(questions):
+        return questions[step]
+    return None
+
+def get_reply(step):
+    if step < len(replies):
+        return replies[step]
+    return "Thank you for sharing. This is the end of this reflection path. I'm here if you want to explore more."

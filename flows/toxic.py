@@ -1,18 +1,27 @@
 questions = [
-    "🧠 Have you been feeling anxious, sad, or fearful after most interactions with them?",
-    "🚩 Do they often ignore your feelings or twist situations to make you feel at fault?",
-    "🧍‍♂️💭 Do you feel like you’re walking on eggshells around them, afraid of triggering a reaction?",
-    "🔁 Is there a repeating pattern of apology, promise, and hurt again?",
-    "😔 Do you feel emotionally drained or smaller after being around them?",
-    "🧍 Do they isolate you from friends or family, or make you feel guilty for having support?",
-    "🗣️ When you express your needs, do they listen and try to understand—or react defensively?",
-    "📉 Has your self-esteem taken a hit since this connection deepened?",
-    "🌧️ Do you feel a loss of joy, peace, or identity since staying connected with them?",
-    "🔚 If nothing changed at all, could you truly see yourself staying and being emotionally safe?"
+    "💣 Have there been moments when fear or anxiety felt normal in this relationship?",
+    "🧍 Do you often feel isolated or unsupported, even when they’re physically present?",
+    "🪤 Have you ever felt manipulated or made to doubt your reality (gaslighting)?",
+    "🚨 Do you walk on eggshells or filter your truth to avoid their reactions?",
+    "🧨 Have threats, name-calling, or control over your choices been present?",
+    "🫥 Have you lost parts of your personality or confidence over time?",
+    "🌀 Do apologies feel sincere or part of a repeated cycle?",
+    "📉 Is your self-worth mostly impacted *because* of this relationship?",
+    "🧭 If a loved one were in this relationship, what would you tell them?",
+    "🌱 What does emotional safety look and feel like to you?"
 ]
 
-end_message = (
-    "💔 Toxic connections can confuse love with control or guilt. You deserve peace, clarity, and respect.\n\n"
-    "✨ Remember: Real love doesn't make you shrink. You're allowed to protect your mental space.\n"
-    "Would you like to reflect or journal about what you’re feeling? 💭"
-)
+replies = [
+    "Noticing fear patterns is a big deal. Safety is a basic need, not a bonus.",
+    "Emotional loneliness in a relationship can be louder than physical distance.",
+    "Trusting your perception again is part of healing. You're not crazy — you're careful.",
+    "Filtering yourself is a survival response. But long-term, it exhausts your truth.",
+    "Toxic behaviors are not 'just fights' — they're data. You deserve peace.",
+    "Feeling lost or small isn’t your fault. It’s okay to start reclaiming yourself.",
+    "When words don’t match actions, patterns speak. You’re learning to see it clearly.",
+    "Your worth is not up for negotiation. Let’s rebuild that from within.",
+    "You often know the truth when imagining it happening to someone you love.",
+    "Safety is the soil where love grows. Let’s start from there."
+]
+def get_question(step):
+    return questions[step] if step < len(questions) else None

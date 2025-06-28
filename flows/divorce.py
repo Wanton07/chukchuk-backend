@@ -1,26 +1,27 @@
-# divorce.py – CBT-based clarity flow for divorce separation
 questions = [
-    "1. How long have you been feeling uncertain about your marriage? 🕰️",
-    "2. What specific patterns or events have led you to consider divorce? 🔁",
-    "3. Have you noticed any recurring communication breakdowns? 🗣️",
-    "4. How does this relationship impact your emotional well-being daily? 💔",
-    "5. When you imagine staying versus leaving, which feels heavier or lighter? ⚖️",
-    "6. What are your fears about ending the relationship? 😟",
-    "7. What are your hopes if the relationship were to end? 🌅",
-    "8. Are there unresolved emotions like guilt, anger, or betrayal? 😞",
-    "9. If your best friend were in your shoes, what would you tell them? 👂",
-    "10. What does peace look like to you right now? 🕊️"
+    "⚖️ What has changed emotionally or practically that led to this point?",
+    "🛠️ Did you both try healing efforts — counseling, conversations, time apart?",
+    "💬 What’s left unsaid between you two that still feels heavy?",
+    "👨‍👩‍👧 If there are kids involved, how has their presence shaped your choices?",
+    "🔄 Is this decision coming from exhaustion, clarity, or survival?",
+    "🌪️ Are you afraid of starting over, or losing identity tied to this relationship?",
+    "🧍‍♀️ Do you feel more alone *with* them or *without* them?",
+    "📚 What lessons do you think this relationship taught you?",
+    "🚪What do you wish someone told you at the start of this marriage?",
+    "🌅 What kind of peace are you hoping for after this chapter?"
 ]
 
-responses = [
-    "Thanks for opening up. Sometimes just putting it into words gives clarity. 🌿",
-    "You’re doing a brave thing—being honest with yourself takes courage. 💪",
-    "Let’s keep exploring… your thoughts matter, and they’re safe here. 🧘",
-    "There’s no pressure to decide. This space is for reflection, not judgement. ⚖️",
-    "You don’t have to figure it all out now. We’re just exploring one thought at a time. 🔍",
-    "This moment is for *you*—not for roles, titles, or expectations. Just *you*. 💛",
-    "Even doubts are data. They tell us where we hurt and what we value. 🧭",
-    "Whatever your decision, it deserves to come from calm—not fear. 🧘‍♂️",
-    "You're not alone in this journey. You're building clarity step by step. 🪜",
-    "Let’s take a deep breath. You’re doing better than you think. 🌬️"
+replies = [
+    "Divorce isn’t failure — it’s often a final chapter after long battles.",
+    "Trying shows you cared. Whether or not it worked, your effort matters.",
+    "Unspoken words carry weight. Sometimes just naming them brings relief.",
+    "Parenting adds complex layers. You’re allowed to want clarity for yourself too.",
+    "Clarity is gold. Exhaustion shows the cost you’ve paid to get here.",
+    "Grief and fear often come before growth. It’s okay to not feel ready.",
+    "Loneliness can exist even in company. You’re learning to honor that truth.",
+    "Lessons don’t erase pain, but they add meaning to it.",
+    "Reflection shows growth. Your younger self did the best they could.",
+    "You deserve calm, ease, and soft mornings. That’s not too much to ask."
 ]
+def get_question(step):
+    return questions[step] if step < len(questions) else None
