@@ -1,96 +1,120 @@
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
-from datetime import datetime
+import os
+from dotenv import load_dotenv
+import openai
 import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
-from state import start_conversation, get_state, advance_step, reset_state
+from state import (
+    start_conversation,
+    get_state,
+    advance_step,
+    reset_state,
+    set_emotion,
+    set_journal,
+    get_full_session
+)
+from emotion import detect_emotion
+
 from flows import toxic, bigone, divorce, unrequited, betrayal, situational, ghosted, notsure
+
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name("chukchuk-logger.json", scope)
+client = gspread.authorize(creds)
+sheet = client.open("ChukChuk Session Logs").sheet1
 
 app = Flask(__name__)
 
-# Google Sheets
-gc = gspread.service_account(filename="/etc/secrets/credentials.json")
-workbook = gc.open("ChukChuk Logs")
-session_sheet = workbook.worksheet("Session Logs")
-
-flow_map = {
-    "1": ("Toxic or Abusive", toxic),
-    "2": ("Big Emotional Breakup", bigone),
-    "3": ("Separation or Divorce", divorce),
-    "4": ("Unrequited Love", unrequited),
-    "5": ("Betrayal or Cheating", betrayal),
-    "6": ("Situational Breakup", situational),
-    "7": ("Ghosted or No Closure", ghosted),
-    "8": ("Not Sure", notsure)
+flows = {
+    "1": ("Toxic or abusive 💔", toxic),
+    "2": ("A big emotional breakup 💞", bigone),
+    "3": ("Separation or divorce ⚖️", divorce),
+    "4": ("Unrequited love 😢", unrequited),
+    "5": ("Betrayal or cheating 😔", betrayal),
+    "6": ("Situational breakup 🌍", situational),
+    "7": ("Ghosted or no closure 👻", ghosted),
+    "8": ("Not sure 🤔", notsure),
 }
 
-def log_row(timestamp, from_number, session_id, flow_type, step, question, answer):
-    session_sheet.append_row([
-        timestamp, from_number, session_id, flow_type, step, question, answer
-    ])
-
 @app.route("/incoming", methods=["POST"])
-def incoming_message():
-    from_number = request.values.get('From', '')
-    incoming_msg = request.values.get('Body', '').strip().lower()
-    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-    resp = MessagingResponse()
+def incoming():
+    user_id = request.form.get("From")
+    user_message = request.form.get("Body", "").strip()
+    response = MessagingResponse()
+    state = get_state(user_id)
 
-    # 🆘 Escalation check
-    if any(x in incoming_msg for x in ["want to die", "kill myself", "end it all"]):
-        resp.message("You’re feeling something very heavy right now 🐰.\nPlease consider speaking to someone trained to help:\n📞 iCall Helpline (9152987821)\nYou are not alone.")
-        return str(resp)
-
-    # 🧠 Get user state
-    state = get_state(from_number)
-
-    # 🌱 If no flow started yet
-    if state is None:
-        if incoming_msg in flow_map:
-            flow_type, flow = flow_map[incoming_msg]
-            start_conversation(from_number, incoming_msg)
-            question = flow.get_question(0)
-            resp.message(
-                f"Okay, we’ll take it slow 🐰\nLet’s start your **{flow_type}** flow.\n\n{question}"
-            )
-            return str(resp)
+    if not state:
+        if user_message in flows:
+            flow_title, flow_module = flows[user_message]
+            start_conversation(user_id, user_message)
+            emotion = detect_emotion(user_message)
+            set_emotion(user_id, emotion)
+            question = flow_module.get_question(0)
+            response.message(f"Okay, we’ll take it slow 🐰\nLet’s start your *{flow_title}* flow.\n\n{question}")
         else:
-            # 🐣 Greeting menu
-            greeting = (
+            menu = (
                 "Hi there, I’m ChukChuk 🐰 — your breakup buddy.\n"
                 "Whatever you're feeling, I’m here to help.\n\n"
-                "**What kind of breakup are you going through?**\n\n"
+                "*What kind of breakup are you going through?*\n\n"
                 "1️⃣ Toxic or abusive 💔\n"
                 "2️⃣ A big emotional breakup 💞\n"
                 "3️⃣ Separation or divorce ⚖️\n"
                 "4️⃣ Unrequited love 😢\n"
                 "5️⃣ Betrayal or cheating 😔\n"
-                "6️⃣ Situational breakup (LDR, timing) 🌍\n"
+                "6️⃣ Situational breakup 🌍\n"
                 "7️⃣ Ghosted or no closure 👻\n"
                 "8️⃣ Not sure 🤔\n\n"
-                "_Reply with a number to begin._"
+                "Reply with a number to begin."
             )
-            resp.message(greeting)
-            return str(resp)
+            response.message(menu)
+        return str(response)
 
-    # 🔁 Continue CBT Flow
-    flow_id = state["type"]
-    flow_type, flow = flow_map[flow_id]
-    step = state["step"]
+    # If user already in conversation
+    if state["step"] < 10:
+        advance_step(user_id, user_message)
+        next_question = flows[state["type"]][1].get_question(state["step"])
 
-    # Log previous response
-    question = flow.get_question(step - 1)
-    log_row(timestamp, from_number, f"{from_number}-{flow_type}", flow_type, step, question, incoming_msg)
+        if next_question:
+            response.message(next_question)
+        else:
+            # After 10 steps, prompt for journal
+            response.message(
+                "🐰 You’ve completed this clarity path.\nIf you’d like, write a few lines about how you're feeling now. I’ll reflect it back gently."
+            )
+        return str(response)
 
-    # Advance and reply
-    advance_step(from_number, incoming_msg)
-    new_step = get_state(from_number)["step"]
-    next_q = flow.get_question(new_step)
+    # Journal response (after 10 questions)
+    if state["journal"] == "":
+        set_journal(user_id, user_message)
 
-    if next_q:
-        resp.message(next_q)
-    else:
-        resp.message(flow.get_reflection())
-        reset_state(from_number)
+        summary_prompt = f"""Summarize this journal with 3 calming points:\n1. Validate the feelings.\n2. Reflect one key theme.\n3. Offer a non-judgmental insight.\n\nJournal:\n{user_message}"""
+        summary = openai.ChatCompletion.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": summary_prompt}]
+        ).choices[0].message.content.strip()
 
-    return str(resp)
+        response.message(f"🐰 Here's a soft reflection:\n\n{summary}")
+
+        # Log full session
+        full_session = get_full_session(user_id)
+        sheet.append_row([
+            user_id,
+            full_session["type"],
+            full_session["emotion"],
+            "\n".join(full_session["responses"]),
+            full_session["journal"],
+            summary
+        ])
+        reset_state(user_id)
+        return str(response)
+
+    # Fallback
+    response.message("🐰 I'm here with you. Just say 'hi' or pick a breakup type again.")
+    return str(response)
+
+if __name__ == "__main__":
+    app.run(debug=True)
