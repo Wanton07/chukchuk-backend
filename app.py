@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 import openai
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import json
+from datetime import datetime
 
 from state import (
     start_conversation,
@@ -23,7 +25,8 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("chukchuk-logger.json", scope)
+creds_dict = json.loads(os.getenv("GOOGLE_CREDS_JSON"))
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 sheet = client.open("ChukChuk Session Logs").sheet1
 
@@ -102,12 +105,14 @@ def incoming():
         # Log full session
         full_session = get_full_session(user_id)
         sheet.append_row([
-            user_id,
-            full_session["type"],
-            full_session["emotion"],
-            "\n".join(full_session["responses"]),
-            full_session["journal"],
-            summary
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # Timestamp
+            user_id,                                       # Twilio ID
+            request.form.get("WaId", ""),                  # Phone number
+            full_session["type"],                          # Clarity path type
+            full_session["emotion"],                       # Detected emotion
+            "\n".join(full_session["responses"]),          # Collected responses
+            full_session["journal"],                       # Journal text
+            summary                                        # GPT summary
         ])
         reset_state(user_id)
         return str(response)
