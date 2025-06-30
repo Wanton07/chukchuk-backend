@@ -29,7 +29,11 @@ with open("/etc/secrets/chukchuk-logger.json", "r") as f:
     creds_dict = json.load(f)
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
-sheet = client.open("ChukChuk Session Logs").sheet1
+try:
+    sheet = client.open("ChukChuk Session Logs").sheet1
+except Exception as e:
+    print(f"⚠️ Google Sheet open error: {e}")
+    sheet = None
 
 app = Flask(__name__)
 
@@ -105,16 +109,22 @@ def incoming():
 
         # Log full session
         full_session = get_full_session(user_id)
-        sheet.append_row([
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # Timestamp
-            user_id,                                       # Twilio ID
-            request.form.get("WaId", ""),                  # Phone number
-            full_session["type"],                          # Clarity path type
-            full_session["emotion"],                       # Detected emotion
-            "\n".join(full_session["responses"]),          # Collected responses
-            full_session["journal"],                       # Journal text
-            summary                                        # GPT summary
-        ])
+        if sheet:
+            try:
+                sheet.append_row([
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # Timestamp
+                    user_id,                                       # Twilio ID
+                    request.form.get("WaId", ""),                  # Phone number
+                    full_session["type"],                          # Clarity path type
+                    full_session["emotion"],                       # Detected emotion
+                    "\n".join(full_session["responses"]),          # Collected responses
+                    full_session["journal"],                       # Journal text
+                    summary                                        # GPT summary
+                ])
+            except Exception as log_error:
+                print(f"⚠️ Error while appending to Google Sheet: {log_error}")
+        else:
+            print("⚠️ Sheet not initialized. Skipping logging.")
         reset_state(user_id)
         return str(response)
 
