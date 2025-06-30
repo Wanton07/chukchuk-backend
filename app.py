@@ -18,7 +18,7 @@ from state import (
 )
 from emotion import detect_emotion
 
-from flows import toxic, bigone, divorce, unrequited, betrayal, situational, ghosted, notsure
+from flows import toxic, bigone, divorce, unrequited, betrayal, situational, ghosted, notsure, test
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -40,6 +40,7 @@ flows = {
     "6": ("Situational breakup 🌍", situational),
     "7": ("Ghosted or no closure 👻", ghosted),
     "8": ("Not sure 🤔", notsure),
+    "9": ("Test Flow 🧪", test)
 }
 
 @app.route("/incoming", methods=["POST"])
@@ -69,7 +70,8 @@ def incoming():
                 "5️⃣ Betrayal or cheating 😔\n"
                 "6️⃣ Situational breakup 🌍\n"
                 "7️⃣ Ghosted or no closure 👻\n"
-                "8️⃣ Not sure 🤔\n\n"
+                "8️⃣ Not sure 🤔\n"
+                "9️⃣ Test Flow 🧪 (for development only)\n\n"
                 "Reply with a number to begin."
             )
             response.message(menu)
