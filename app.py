@@ -78,7 +78,12 @@ def incoming():
         return str(response)
 
     # If user already in conversation
-    if state["step"] < 10:
+    if state["type"] == "9":
+        max_steps = 3
+    else:
+        max_steps = 10
+
+    if state["step"] < max_steps:
         advance_step(user_id, user_message)
         next_question = flows[state["type"]][1].get_question(state["step"])
 
@@ -91,7 +96,7 @@ def incoming():
             )
         return str(response)
 
-    # Journal response (after 10 questions)
+    # Journal response (after last question in flow)
     if state["journal"] == "":
         set_journal(user_id, user_message)
 
