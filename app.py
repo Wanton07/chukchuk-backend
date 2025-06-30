@@ -6,7 +6,6 @@ import openai
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import json
-from datetime import datetime
 
 from state import (
     start_conversation,
@@ -25,15 +24,10 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-with open("/etc/secrets/chukchuk-logger.json", "r") as f:
-    creds_dict = json.load(f)
+creds_dict = json.loads(os.getenv("GOOGLE_CREDS_JSON"))
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
-try:
-    sheet = client.open("ChukChuk Session Logs").sheet1
-except Exception as e:
-    print(f"⚠️ Google Sheet open error: {e}")
-    sheet = None
+sheet = client.open("ChukChuk Session Logs").sheet1
 
 app = Flask(__name__)
 
@@ -100,7 +94,7 @@ def incoming():
         set_journal(user_id, user_message)
 
         summary_prompt = f"""Summarize this journal with 3 calming points:\n1. Validate the feelings.\n2. Reflect one key theme.\n3. Offer a non-judgmental insight.\n\nJournal:\n{user_message}"""
-        summary = openai.ChatCompletion.create(
+        summary = openai.chat.completions.create(
             model="gpt-4o",
             messages=[{"role": "user", "content": summary_prompt}]
         ).choices[0].message.content.strip()
@@ -109,22 +103,14 @@ def incoming():
 
         # Log full session
         full_session = get_full_session(user_id)
-        if sheet:
-            try:
-                sheet.append_row([
-                    datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # Timestamp
-                    user_id,                                       # Twilio ID
-                    request.form.get("WaId", ""),                  # Phone number
-                    full_session["type"],                          # Clarity path type
-                    full_session["emotion"],                       # Detected emotion
-                    "\n".join(full_session["responses"]),          # Collected responses
-                    full_session["journal"],                       # Journal text
-                    summary                                        # GPT summary
-                ])
-            except Exception as log_error:
-                print(f"⚠️ Error while appending to Google Sheet: {log_error}")
-        else:
-            print("⚠️ Sheet not initialized. Skipping logging.")
+        sheet.append_row([
+            user_id,
+            full_session["type"],
+            full_session["emotion"],
+            "\n".join(full_session["responses"]),
+            full_session["journal"],
+            summary
+        ])
         reset_state(user_id)
         return str(response)
 
