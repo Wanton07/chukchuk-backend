@@ -97,16 +97,27 @@ def incoming():
         return str(response)
 
     # Journal response (after last question in flow)
-    if state["journal"] == "":
+    if not state.get("journal"):
         set_journal(user_id, user_message)
 
-        summary_prompt = f"""Summarize this journal with 3 calming points:\n1. Validate the feelings.\n2. Reflect one key theme.\n3. Offer a non-judgmental insight.\n\nJournal:\n{user_message}"""
-        summary = openai.chat.completions.create(
-            model="gpt-4o",
-            messages=[{"role": "user", "content": summary_prompt}]
-        ).choices[0].message.content.strip()
+        summary_prompt = f"""Summarize this journal with 3 calming points:
+1. Validate the feelings.
+2. Reflect one key theme.
+3. Offer a non-judgmental insight.
 
-        response.message(f"🐰 Here's a soft reflection:\n\n{summary}")
+Journal:
+{user_message}"""
+
+        try:
+            completion = openai.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": summary_prompt}]
+            )
+            summary = completion.choices[0].message.content.strip()
+            response.message(f"🐰 Here's a soft reflection:\n\n{summary}")
+        except Exception as e:
+            summary = "Summary failed to generate due to a system error. But your journal was saved."
+            response.message("🐰 I read that. Just a small glitch while summarizing, but I’ve noted what you wrote 🧠")
 
         # Log full session
         full_session = get_full_session(user_id)
