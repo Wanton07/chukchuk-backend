@@ -97,7 +97,7 @@ def incoming():
         return str(response)
 
     # Journal response (after last question in flow)
-    if not state.get("journal"):
+    if state["journal"] == "":
         set_journal(user_id, user_message)
 
         summary_prompt = f"""Summarize this journal with 3 calming points:
@@ -116,8 +116,8 @@ Journal:
             summary = completion.choices[0].message.content.strip()
             response.message(f"🐰 Here's a soft reflection:\n\n{summary}")
         except Exception as e:
-            summary = "Summary failed to generate due to a system error. But your journal was saved."
-            response.message("🐰 I read that. Just a small glitch while summarizing, but I’ve noted what you wrote 🧠")
+            summary = "🐰 I read that. Just a small glitch while summarizing, but I’ve noted what you wrote 🧠"
+            response.message(summary)
 
         # Log full session
         full_session = get_full_session(user_id)
@@ -133,6 +133,7 @@ Journal:
         return str(response)
 
     # Fallback
+    reset_state(user_id)
     response.message("🐰 I'm here with you. Just say 'hi' or pick a breakup type again.")
     return str(response)
 
