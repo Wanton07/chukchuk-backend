@@ -140,8 +140,11 @@ Journal:
             full_session = get_full_session(user_id)
             full_session["tone"] = tone
             # Gen Z tone customization
-            if tone.lower() in ["confused", "anxious"]:
-                summary = summary.replace("🐰 Here's a soft reflection:", "🐰 Real talk time: Let's unpack this 💬")
+            if tone.lower() in ["confused", "anxious", "overwhelmed", "stressed", "lost", "numb"]:
+                summary = summary.replace(
+                    "🐰 Here's a soft reflection:",
+                    "🐰 Real talk time: Let’s unpack this 💬"
+                )
             response.message(f"🐰 Here's a soft reflection:\n\n{summary}")
         except Exception as e:
             summary = "🐰 I read that. Just a small glitch while summarizing, but I’ve noted what you wrote 🧠"
