@@ -47,7 +47,24 @@ flows = {
 def incoming():
     user_id = request.form.get("From")
     user_message = request.form.get("Body", "").strip()
+
     response = MessagingResponse()
+
+    if user_message.lower() == "privacy":
+        response.message(
+            "🔐 *Your Privacy Matters*\n\n"
+            "Everything you share with ChukChuk stays between us.\n"
+            "We don’t store personal identifiers, and your reflections are never used to train any model.\n"
+            "Type `delete` anytime to clear your session.\n\n"
+            "Your journey, your control. 🧘‍♂️"
+        )
+        return str(response)
+
+    if user_message.lower() == "delete":
+        reset_state(user_id)
+        response.message("🧹 Your session has been cleared.\nYou can start again anytime by choosing a breakup type.")
+        return str(response)
+
     state = get_state(user_id)
 
     if not state:
@@ -119,14 +136,23 @@ Journal:
             tone_line = next((line for line in lines if "Tone" in line), "")
             tone = tone_line.split(":")[-1].strip() if ":" in tone_line else "Unknown"
             summary = "\n".join([line for line in lines if "Tone" not in line]).strip()
+            # Store the tone in the session for logging
+            full_session = get_full_session(user_id)
+            full_session["tone"] = tone
+            # Gen Z tone customization
+            if tone.lower() in ["confused", "anxious"]:
+                summary = summary.replace("🐰 Here's a soft reflection:", "🐰 Real talk time: Let's unpack this 💬")
             response.message(f"🐰 Here's a soft reflection:\n\n{summary}")
         except Exception as e:
             summary = "🐰 I read that. Just a small glitch while summarizing, but I’ve noted what you wrote 🧠"
             tone = "Unknown"
+            # Still try to log the tone as "Unknown"
+            full_session = get_full_session(user_id)
+            full_session["tone"] = tone
             response.message(summary)
 
         # Log full session
-        full_session = get_full_session(user_id)
+        # Use the tone from full_session, not the local variable
         sheet.append_row([
             user_id,
             full_session["type"],
@@ -134,7 +160,7 @@ Journal:
             "\n".join(full_session["responses"]),
             full_session["journal"],
             summary,
-            tone
+            full_session["tone"]
         ])
         reset_state(user_id)
         return str(response)
