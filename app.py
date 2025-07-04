@@ -6,6 +6,7 @@ import openai
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import json
+from datetime import datetime
 
 from state import (
     start_conversation,
@@ -63,6 +64,21 @@ def incoming():
     if user_message.lower() == "delete":
         reset_state(user_id)
         response.message("🧹 Your session has been cleared.\nYou can start again anytime by choosing a breakup type.")
+        return str(response)
+
+    if user_message.lower() == "delete today":
+        today = datetime.now().strftime("%Y-%m-%d")
+        records = sheet.get_all_records()
+        deleted = False
+        for idx, row in enumerate(records, start=2):  # skip header
+            if row.get("user_id") == user_id and row.get("timestamp") == today:
+                sheet.delete_row(idx)
+                deleted = True
+                break
+        if deleted:
+            response.message("🗑️ Today's session logs have been deleted. The rest of your reflections are still safe.")
+        else:
+            response.message("📅 No logs found for today under your ID.")
         return str(response)
 
     state = get_state(user_id)
@@ -163,7 +179,8 @@ Journal:
             "\n".join(full_session["responses"]),
             full_session["journal"],
             summary,
-            full_session["tone"]
+            full_session["tone"],
+            datetime.now().strftime("%Y-%m-%d")
         ])
         reset_state(user_id)
         return str(response)
