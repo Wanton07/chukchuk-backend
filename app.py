@@ -100,10 +100,11 @@ def incoming():
     if state["journal"] == "":
         set_journal(user_id, user_message)
 
-        summary_prompt = f"""Summarize this journal with 3 calming points:
+        summary_prompt = f"""Summarize this journal with 3 calming points and identify the emotional tone (e.g., hopeful, regretful, confused, angry, peaceful). 
 1. Validate the feelings.
 2. Reflect one key theme.
 3. Offer a non-judgmental insight.
+4. Tone (one word): ?
 
 Journal:
 {user_message}"""
@@ -114,9 +115,14 @@ Journal:
                 messages=[{"role": "user", "content": summary_prompt}]
             )
             summary = completion.choices[0].message.content.strip()
+            lines = summary.splitlines()
+            tone_line = next((line for line in lines if "Tone" in line), "")
+            tone = tone_line.split(":")[-1].strip() if ":" in tone_line else "Unknown"
+            summary = "\n".join([line for line in lines if "Tone" not in line]).strip()
             response.message(f"🐰 Here's a soft reflection:\n\n{summary}")
         except Exception as e:
             summary = "🐰 I read that. Just a small glitch while summarizing, but I’ve noted what you wrote 🧠"
+            tone = "Unknown"
             response.message(summary)
 
         # Log full session
@@ -127,7 +133,8 @@ Journal:
             full_session["emotion"],
             "\n".join(full_session["responses"]),
             full_session["journal"],
-            summary
+            summary,
+            tone
         ])
         reset_state(user_id)
         return str(response)
