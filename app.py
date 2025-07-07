@@ -7,6 +7,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import json
 from datetime import datetime
+from supabase import create_client
 
 from state import (
     start_conversation,
@@ -29,6 +30,12 @@ creds_dict = json.loads(os.getenv("GOOGLE_CREDS_JSON"))
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 sheet = client.open("ChukChuk Session Logs").sheet1
+
+# Supabase initialization
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+SUPABASE_TABLE = os.getenv("SUPABASE_TABLE_NAME")
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = Flask(__name__)
 
@@ -170,8 +177,23 @@ Journal:
             full_session["tone"] = tone
             response.message(summary)
 
-        # Log full session
-        # Use the tone from full_session, not the local variable
+        # Log full session to Supabase and Google Sheets as backup
+        try:
+            # Log to Supabase
+            supabase.table(SUPABASE_TABLE).insert({
+                "user_id": user_id,
+                "flow_type": full_session["type"],
+                "emotion": full_session["emotion"],
+                "responses": "\n".join(full_session["responses"]),
+                "journal": full_session["journal"],
+                "summary": summary,
+                "tone": full_session["tone"],
+                "timestamp": datetime.now().isoformat()
+            }).execute()
+        except Exception as e:
+            print("❌ Supabase logging failed:", e)
+
+        # Also log to Google Sheets as backup
         sheet.append_row([
             user_id,
             full_session["type"],
