@@ -8,6 +8,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import json
 from datetime import datetime
 from supabase import create_client
+import traceback
 
 from state import (
     start_conversation,
@@ -32,8 +33,8 @@ client = gspread.authorize(creds)
 sheet = client.open("ChukChuk Session Logs").sheet1
 
 # Supabase initialization
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").strip()
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "").strip()
 SUPABASE_TABLE = os.getenv("SUPABASE_TABLE_NAME")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
@@ -191,6 +192,7 @@ Journal:
                 "timestamp": datetime.now().isoformat()
             }).execute()
         except Exception as e:
+            traceback.print_exc()
             print("❌ Supabase logging failed:", e)
 
         # Also log to Google Sheets as backup
