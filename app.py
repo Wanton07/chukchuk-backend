@@ -27,7 +27,11 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-with open(os.getenv("GOOGLE_CREDS_JSON_PATH"), "r") as f:
+creds_path = os.getenv("GOOGLE_CREDS_JSON_PATH")
+if not creds_path:
+    raise EnvironmentError("⚠️ GOOGLE_CREDS_JSON_PATH not found in environment variables.")
+
+with open(creds_path, "r") as f:
     creds_dict = json.load(f)
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
