@@ -1,9 +1,13 @@
 # Required Supabase table: chukchuk_logs
 # Columns:
-# - session_id: text
-# - user_message: text
-# - reply: text
-# - timestamp: timestamp or text
+# - user_id: text
+# - flow_type: text
+# - emotion: text
+# - responses: text
+# - journal: text
+# - summary: text
+# - tone: text
+# - created_at: timestamp with time zone
 
 import os
 from supabase import create_client, Client
@@ -18,7 +22,7 @@ def log_to_supabase(data: dict):
     try:
         mapped_data = {
             "user_id": data.get("user_number"),
-            "type": "whatsapp",
+            "flow_type": "whatsapp",
             "emotion": data.get("emotion_detected"),
             "responses": data.get("response"),
             "journal": data.get("journal"),

@@ -188,13 +188,13 @@ Journal:
             # Log to Supabase
             supabase.table(SUPABASE_TABLE).insert({
                 "user_id": user_id,
-                "flow_type": full_session["type"],
+                "type": full_session["type"],
                 "emotion": full_session["emotion"],
                 "responses": "\n".join(full_session["responses"]),
                 "journal": full_session["journal"],
                 "summary": summary,
                 "tone": full_session["tone"],
-                "timestamp": datetime.now().isoformat()
+                "created_at": datetime.now().isoformat()
             }).execute()
         except Exception as e:
             traceback.print_exc()
