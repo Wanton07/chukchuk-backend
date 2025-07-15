@@ -23,6 +23,18 @@ from emotion import detect_emotion
 
 from flows import toxic, bigone, divorce, unrequited, betrayal, situational, ghosted, notsure, test
 
+def handle_feedback_reply(user_input):
+    input_lower = user_input.lower().strip()
+
+    if input_lower == "a":
+        return "🐰 I’m really glad you feel lighter. Take your time and I’ll be here if you need to talk again. 💙", "lighter", False
+    elif input_lower == "b":
+        return "🐰 I understand. Sometimes clarity takes more than one conversation. Would you like to try another path or take a break?", "confused", False
+    elif input_lower == "c":
+        return "🐰 Thank you for sharing. I’ve noted that you may want to talk to someone real. Sending you a virtual hug. 🤗", "escalate", True
+    else:
+        return None, None, None
+
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -63,6 +75,19 @@ def incoming():
     user_message = request.form.get("Body", "").strip()
 
     response = MessagingResponse()
+
+    response_text, mood, escalate = handle_feedback_reply(user_message)
+    if response_text:
+        # Append feedback to Google Sheet for now
+        sheet.append_row([
+            user_id,
+            "feedback",
+            mood,
+            "ESCALATE" if escalate else "",
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        ])
+        response.message(response_text)
+        return str(response)
 
     if user_message.lower() == "privacy":
         response.message(
