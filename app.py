@@ -86,6 +86,20 @@ def incoming():
             "ESCALATE" if escalate else "",
             datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ])
+        try:
+            supabase.table("user_testing_feedback").insert({
+                "tester_name": user_id,
+                "flow_picked": "unknown",
+                "stuck_at_step": None,
+                "feedback_choice": mood,
+                "drop_off_point": False,
+                "final_mood_emoji": "",
+                "comments": "",
+                "created_at": datetime.now().isoformat()
+            }).execute()
+        except Exception as e:
+            traceback.print_exc()
+            print("❌ Supabase feedback logging failed:", e)
         response.message(response_text)
         return str(response)
 
