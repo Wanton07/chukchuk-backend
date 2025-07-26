@@ -169,6 +169,10 @@ def incoming():
         max_steps = 10
 
     if state["step"] < max_steps:
+        # Simple invalid input fallback filter
+        if len(user_message.strip()) <= 2 and user_message.lower() not in ["yes", "no", "maybe", "idk", "ok"]:
+            response.message("🐰 Hmm, I didn’t quite catch that. Want to continue or choose another path? Just reply again.")
+            return str(response)
         advance_step(user_id, user_message)
         next_question = flows[state["type"]][1].get_question(state["step"])
 
