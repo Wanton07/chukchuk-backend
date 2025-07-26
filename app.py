@@ -78,6 +78,7 @@ def incoming():
 
     response_text, mood, escalate = handle_feedback_reply(user_message)
     if response_text:
+        state = get_state(user_id) or {}
         # Append feedback to Google Sheet for now
         sheet.append_row([
             user_id,
@@ -89,7 +90,7 @@ def incoming():
         try:
             supabase.table("user_testing_feedback").insert({
                 "tester_name": user_id,
-                "flow_picked": "unknown",
+                "flow_picked": flows.get(state.get("type", ""), ["unknown"])[0],
                 "stuck_at_step": None,
                 "feedback_choice": mood,
                 "drop_off_point": False,
