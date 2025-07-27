@@ -1,27 +1,27 @@
 questions = [
-    "🧭 What external factor made this relationship difficult — distance, timing, family?",
-    "🕓 If circumstances had been different, do you think this would’ve worked?",
-    "💬 Did you talk openly about the situation, or avoid it out of fear?",
-    "📆 Was this a slow drift or a sudden ending?",
-    "⏳ Are you waiting for ‘someday’ to try again?",
-    "🎢 Do you feel emotionally stuck in a loop of what-ifs?",
-    "🌱 What did this relationship help you discover about your needs?",
-    "🧃 What were the sweetest moments that still linger in your heart?",
-    "📉 What signs showed it wasn’t sustainable — even if it was beautiful?",
-    "🦋 What would it look like to carry the love, but not the ache?"
+    "🌍 Was it distance, timing, family — or something else that pulled you apart?",
+    "🔄 Do you think it could have worked if life had been different?",
+    "💬 Did you talk honestly about what was happening, or keep things inside?",
+    "📆 Did it end suddenly or drift apart over time?",
+    "⏳ Are you still hoping that someday you’ll be back together?",
+    "🎢 Are you stuck replaying ‘what ifs’ in your mind?",
+    "🌱 What did this relationship teach you about what you really need?",
+    "💖 What’s one memory that still brings you warmth?",
+    "🚧 Were there signs it wasn’t working, even if it felt special?",
+    "🕊️ What would it feel like to let go without letting go of the love?"
 ]
 
 replies = [
-    "Situational pain is valid. Sometimes the world doesn’t align with the heart.",
-    "You can honor both: what could’ve been and what is.",
-    "Avoidance often protects the moment, but wounds the future.",
-    "Slow fades hurt deeply — they confuse closure.",
-    "Waiting keeps you in pause. What if clarity moved you forward?",
-    "Loops are not lessons. Let’s help you step out.",
-    "Even brief love can be a teacher. You’re growing from this.",
-    "Sweetness doesn’t cancel out reality — it simply lives alongside it.",
-    "Beauty without stability is still painful. It’s okay to let it go.",
-    "You can carry the love, but leave the weight behind."
+    "Life gets in the way sometimes — and that doesn’t make your love any less real.",
+    "It’s okay to grieve the version of this story that never got written.",
+    "Holding it in can feel easier, but you deserve open, honest conversations.",
+    "Slow endings can leave big feelings. Closure takes time.",
+    "Hoping is human — but clarity helps you move forward.",
+    "‘What ifs’ keep you stuck. Let’s help you find the ‘what now.’",
+    "Even a short chapter can teach big things about your heart.",
+    "It’s okay to treasure the sweet parts while letting go of the ache.",
+    "Just because it felt magical doesn’t mean it could last — and that’s okay.",
+    "You can carry love forward, even without carrying the pain with it."
 ]
 def get_question(step):
     return questions[step] if step < len(questions) else get_feedback_prompt()

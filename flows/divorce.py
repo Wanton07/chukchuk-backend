@@ -1,27 +1,27 @@
 questions = [
-    "⚖️ What has changed emotionally or practically that led to this point?",
-    "🛠️ Did you both try healing efforts — counseling, conversations, time apart?",
-    "💬 What’s left unsaid between you two that still feels heavy?",
-    "👨‍👩‍👧 If there are kids involved, how has their presence shaped your choices?",
-    "🔄 Is this decision coming from exhaustion, clarity, or survival?",
-    "🌪️ Are you afraid of starting over, or losing identity tied to this relationship?",
-    "🧍‍♀️ Do you feel more alone *with* them or *without* them?",
-    "📚 What lessons do you think this relationship taught you?",
-    "🚪What do you wish someone told you at the start of this marriage?",
-    "🌅 What kind of peace are you hoping for after this chapter?"
+    "⚖️ Did things feel off for a while before the separation?",
+    "🛠️ Did you both try to fix things before parting ways?",
+    "💬 Are there still things left unsaid that feel heavy inside you?",
+    "👨‍👩‍👧 Are you worried about how this is affecting your kids or family?",
+    "🔄 Do you feel more tired, clear, or just emotionally drained?",
+    "🌪️ Are you scared about starting over or losing your sense of identity?",
+    "🧍‍♀️ Do you feel more alone with them or without them?",
+    "📚 What lessons did this relationship teach you about love or life?",
+    "🚪 If you could talk to your younger self at the start of this, what would you say?",
+    "🌅 What kind of peace are you hoping to feel after this chapter?"
 ]
 
 replies = [
-    "Divorce isn’t failure — it’s often a final chapter after long battles.",
-    "Trying shows you cared. Whether or not it worked, your effort matters.",
-    "Unspoken words carry weight. Sometimes just naming them brings relief.",
-    "Parenting adds complex layers. You’re allowed to want clarity for yourself too.",
-    "Clarity is gold. Exhaustion shows the cost you’ve paid to get here.",
-    "Grief and fear often come before growth. It’s okay to not feel ready.",
-    "Loneliness can exist even in company. You’re learning to honor that truth.",
-    "Lessons don’t erase pain, but they add meaning to it.",
-    "Reflection shows growth. Your younger self did the best they could.",
-    "You deserve calm, ease, and soft mornings. That’s not too much to ask."
+    "Divorce isn’t failure — sometimes it’s choosing peace over constant pain.",
+    "Trying shows you cared. Whether or not it worked, that effort matters.",
+    "Even if words were never said out loud, your feelings still matter deeply.",
+    "It’s okay to care about others and still want healing for yourself.",
+    "Feeling drained doesn’t mean you’re broken — it means you’ve carried a lot.",
+    "Starting over is scary, but it can also be the start of something lighter.",
+    "Loneliness inside a relationship can feel worse than being alone — you’re allowed to notice that.",
+    "Hard times can still teach soft lessons. Your pain holds meaning.",
+    "You’ve grown. And your past self did what they knew with what they had.",
+    "Peace might feel far now, but every little step toward calm is still progress."
 ]
 def get_question(step):
     return questions[step] if step < len(questions) else get_feedback_prompt()

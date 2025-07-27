@@ -1,27 +1,27 @@
 questions = [
-    "😔 How long have you carried feelings that weren’t returned?",
-    "🎢 Have they given mixed signals or been clear about their stance?",
-    "🎭 Do you ever feel like you’re performing to win their attention?",
-    "🪞 How has this dynamic affected your self-esteem or confidence?",
-    "🔄 Do you keep hoping something might change, or do you know deep down?",
-    "🧘 What kind of love do you want — mutual, calm, and certain?",
-    "🧃 Have you been romanticizing moments that were never fully real?",
-    "🔒 Have you felt stuck, waiting for their emotional availability?",
-    "🌅 What would it feel like to open space for someone who chooses you?",
-    "📣 What do you need to hear right now to let go, even a little?"
+    "💔 Did you ever tell them how you really felt?",
+    "❓ Were they clear about their feelings, or did they send mixed signals?",
+    "🌈 Do you imagine what it would’ve been like if things had worked out?",
+    "🪞 Do you find yourself comparing to the person they chose or liked?",
+    "🎭 Are you in love with them — or the idea of being with them?",
+    "😔 Has this made you feel unsure or less confident about yourself?",
+    "📓 Have you ever written down how you feel, even just for yourself?",
+    "🔁 Are you hoping they’ll still change their mind?",
+    "🗣️ What do your close friends say about all this?",
+    "🌤️ What’s one kind thought you can give yourself to feel even a little better?"
 ]
 
 replies = [
-    "Longing is real pain. It deserves just as much space as any breakup.",
-    "Mixed signals create confusion, not chemistry. You deserve clarity.",
-    "You shouldn’t have to prove your worth to be loved.",
-    "Your value doesn’t shrink because someone didn’t see it.",
-    "The quiet truth you carry deserves to be honored gently.",
-    "Love should feel safe and shared. Let’s start with wanting *that*.",
-    "It’s okay to admit what was imagined. Closure starts with honesty.",
-    "Stuckness is your cue. You don’t need permission to move forward.",
-    "Being chosen — fully and freely — is worth waiting for.",
-    "Sometimes, healing starts with giving yourself the goodbye they never gave."
+    "It’s brave to admit your feelings — even if they weren’t returned.",
+    "Mixed signals create more pain than peace. You deserve honesty.",
+    "Dreaming about 'what could’ve been' is part of letting go.",
+    "Comparing yourself will only steal your peace. You are enough.",
+    "Sometimes it’s the idea we hold onto, more than the person.",
+    "This doesn’t make you less worthy — your heart just needed space.",
+    "Journaling or writing can help release what’s been stuck inside.",
+    "It’s okay to hope — just don’t lose yourself waiting.",
+    "Your friends see you clearly. Sometimes they reflect what we miss.",
+    "Even one soft thought for yourself is a sign of healing."
 ]
 def get_question(step):
     return questions[step] if step < len(questions) else get_feedback_prompt()

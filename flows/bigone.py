@@ -1,27 +1,27 @@
 questions = [
-    "💔 This seems like a really big decision. What made you feel it's time to reflect on this relationship?",
-    "🧱 What kind of emotional foundation has this relationship been built on — love, fear, obligation?",
-    "📊 Over time, what has increased and what has decreased — trust, respect, closeness?",
-    "⛅ Do you often feel more peaceful or more anxious when thinking of them?",
-    "🪞 In this relationship, do you feel seen and accepted for who you truly are?",
-    "🎭 Are there parts of yourself you’ve hidden just to keep the peace or avoid conflict?",
-    "🔁 Are there any repetitive patterns (fights, silences, doubts) that have worn you down?",
-    "🧩 When you imagine life without this relationship, what feelings come up first?",
-    "📉 If nothing changed in this relationship for the next 2 years, how would that impact you?",
-    "🔓 What does freedom or growth look like for you on the other side of this clarity?"
+    "💔 What feeling has been the hardest to carry since the breakup?",
+    "📸 Do your good memories with them make it harder to let go?",
+    "🗣️ Did you get a chance to have one last honest conversation?",
+    "🔁 Do you keep replaying things in your head, wondering what went wrong?",
+    "⚖️ Do your feelings go back and forth between missing them and feeling hurt?",
+    "✍️ Have you written them a message, even if you never sent it?",
+    "🛌 Have you been sleeping okay or has your routine been off?",
+    "🔮 Is it hard to picture a happy future without them in it?",
+    "💬 What’s one thing you wish they truly understood about you?",
+    "🌱 Is there even one small part of you that feels like it’s starting to heal?"
 ]
 
 replies = [
-    "You’re taking a strong first step by pausing to reflect. Let’s look at what’s underneath.",
-    "Naming the emotional base can help you understand why it feels so heavy. You're doing deep work.",
-    "Patterns matter. Seeing what’s grown or faded helps make things more real — and less confusing.",
-    "Your nervous system often knows first. Let’s listen to it gently, without judgment.",
-    "Being seen is a need, not a luxury. Let’s explore what’s been missing.",
-    "You shouldn’t have to shrink to fit. Let's name what you've been holding back.",
-    "You deserve relationships that evolve, not repeat. Let’s break down these cycles.",
-    "Those first feelings are important data. You don't need to act — just notice for now.",
-    "Time helps measure clarity. Imagining the future helps your inner voice speak up.",
-    "That vision of freedom is powerful. Let’s walk toward it step by step, with care."
+    "That heavy feeling deserves care — you don’t have to carry it alone.",
+    "Good memories can feel like anchors. You're not wrong for missing the good times.",
+    "Closure can help, but sometimes we carry words we never got to say. It’s okay.",
+    "It’s natural to rewind everything in your mind — you’re just trying to understand.",
+    "Mixed emotions are normal. You’re healing, even if it doesn’t feel like it yet.",
+    "Writing things out can be healing, even if no one else reads it.",
+    "Breakups can shake your routine. Be gentle with yourself right now.",
+    "It’s okay if the future feels blurry. You’re still finding your new path.",
+    "Wanting to be understood is human. You deserve to be seen deeply.",
+    "Noticing even a tiny shift toward healing is a big deal. You’re getting there."
 ]
 
 def get_question(step):

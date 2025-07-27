@@ -1,27 +1,27 @@
 questions = [
-    "💔 What was broken — trust, loyalty, promises, or something deeper?",
-    "🎯 Was it a one-time incident or a pattern of betrayal?",
-    "😶 Did you find out through them or on your own?",
-    "🧩 What part of the betrayal hurts most — the act or the hiding?",
-    "🌪️ How has this impacted your sense of safety in relationships?",
-    "🧠 Do you replay the moment it happened over and over?",
-    "🧱 What do you fear about letting go — the past or what comes next?",
-    "🌙 Do you ever blame yourself, even secretly?",
-    "🛡️ What kind of boundary or clarity would protect you now?",
-    "🌄 What does healing from this betrayal look like in your life?"
+    "💔 What did they break — your trust, loyalty, or something even deeper?",
+    "🎯 Was it just one time, or has it happened more than once?",
+    "😶 Did you find out because they told you, or did you discover it yourself?",
+    "🧩 What hurts more — what they did or that they kept it from you?",
+    "🌪️ Has this changed how safe you feel in relationships overall?",
+    "🧠 Do you keep thinking about the moment you found out?",
+    "🧱 What’s harder to let go of — the past or what might come next?",
+    "🌙 Do you ever secretly wonder if it was somehow your fault?",
+    "🛡️ What boundary do you wish you had now to feel more protected?",
+    "🌄 If healing was a picture in your mind, what would it look like?"
 ]
 
 replies = [
-    "Betrayal isn’t just about broken promises — it shatters emotional reality.",
-    "Patterns speak louder than apologies. You’re allowed to notice them.",
-    "How you found out matters. Truth delayed still cuts.",
-    "Hiding truth deepens the cut. Your pain makes complete sense.",
-    "Safety can take years to rebuild — you’re not weak for needing that.",
-    "Replaying is the mind's way to make sense of chaos. You’re not stuck.",
-    "Letting go isn’t forgetting — it’s choosing peace over pain.",
-    "Blame is a trauma echo. It belongs to them, not you.",
-    "Boundaries aren’t walls — they’re bridges to self-respect.",
-    "Healing isn’t linear. But it begins with saying: I didn’t deserve that."
+    "Betrayal isn’t just about broken promises — it can shake your whole world.",
+    "If it’s a pattern, your feelings are not overreacting — they’re trying to protect you.",
+    "How you found out matters. It hurts when truth has to be uncovered, not offered.",
+    "Keeping things hidden makes it hurt even more. You're allowed to feel angry and sad.",
+    "It’s okay to feel unsafe now. You’re not weak — you’re healing.",
+    "Your mind might keep going back to that moment. That’s normal when trust breaks.",
+    "Letting go doesn’t mean forgetting. It means choosing your peace.",
+    "Even if you blame yourself sometimes, this was not your fault.",
+    "You deserve boundaries that make you feel respected and calm.",
+    "Healing isn’t a straight road. But just wanting to heal is a powerful first step."
 ]
 def get_question(step):
     return questions[step] if step < len(questions) else get_feedback_prompt()

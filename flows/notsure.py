@@ -1,27 +1,27 @@
 questions = [
-    "🤔 What emotions are clashing the most — guilt, fear, hope, or confusion?",
-    "🔄 Are your thoughts about breaking up constant or only in certain moments?",
-    "🎭 Are you showing up as your true self in this relationship?",
-    "🧘 How does your body react when you imagine staying vs. leaving?",
-    "🧩 What do you get from this relationship — comfort, chaos, duty, joy?",
-    "🪞 Are you in love with the person or the potential of who they could become?",
-    "⚖️ If nothing changed in 6 months, would you feel more stuck or more settled?",
-    "📣 If your best friend described this exact relationship, what would you tell them?",
-    "🔍 What fears are keeping you from exploring the truth fully?",
-    "🌱 What would clarity feel like in your body — light, grounded, certain?"
+    "🤔 Are your feelings all mixed up — like guilt, hope, fear, or confusion?",
+    "🔄 Do you keep thinking about ending things, or does it come and go?",
+    "🎭 Do you feel like you’re fully yourself when you’re with them?",
+    "🧘 When you picture staying vs. leaving, how does your body feel?",
+    "🎢 Does this relationship feel calm, joyful, or more like a rollercoaster?",
+    "🪞 Are you in love with them — or with who you hope they’ll become?",
+    "⏳ If things stayed the same for 6 more months, how would that feel?",
+    "👯 If your best friend was in your shoes, what would you tell them?",
+    "🫣 Are there any fears stopping you from seeing things clearly?",
+    "🌤️ If you had clarity, how would your heart or body feel?"
 ]
 
 replies = [
-    "Confusion is part of clarity. You’re not wrong for feeling both love and doubt.",
-    "Patterns matter. If these thoughts keep returning, they’re telling you something.",
-    "Hiding parts of yourself can drain you slowly. You deserve to be whole.",
-    "The body knows. Notice — do you tense up or relax when you imagine freedom?",
-    "It’s okay to name both the good and the hard. You’re seeing the full picture.",
-    "Potential is not a promise. You deserve someone who already shows up.",
-    "Time is a teacher. Would staying be healing or just delaying?",
-    "You already give great advice — now offer it to yourself.",
-    "Fear doesn’t mean wrong — but it can be a signal to slow down and ask more.",
-    "Clarity is not a sudden light — it’s a steady unfolding. You’re already on the way."
+    "Mixed feelings are human. You’re not broken — you’re just figuring things out.",
+    "If the thought keeps coming back, it’s worth listening to.",
+    "You deserve a relationship where you can be your full, honest self.",
+    "Your body often knows what your mind is still unsure about. Trust it.",
+    "Love isn’t supposed to feel like a constant up-and-down. You deserve steady care.",
+    "Hoping someone changes is hard. You deserve someone who’s already showing up.",
+    "The future matters. Ask yourself if this is peace or just habit.",
+    "The advice you’d give your friend is often the truth you need too.",
+    "Fear can protect, but it can also block the truth. You're allowed to look deeper.",
+    "Clarity might come slowly — but the fact you’re seeking it means you’re on the way."
 ]
 def get_question(step):
     return questions[step] if step < len(questions) else get_feedback_prompt()

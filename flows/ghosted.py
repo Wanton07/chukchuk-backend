@@ -1,27 +1,27 @@
 questions = [
-    "👻 Did the silence feel sudden or was it slowly growing?",
-    "🧠 Are you stuck asking why, without any real answer?",
-    "💬 Did you try reaching out after being ghosted? What happened?",
-    "📉 How has this experience affected your self-worth?",
-    "🔎 Are you blaming yourself for their silence?",
-    "🌪️ Does the lack of closure keep pulling you back emotionally?",
-    "🛑 What would you say to them now if they actually listened?",
-    "📱 Does seeing their profile or presence online trigger you?",
-    "🧭 What does closure look like when the other person won’t offer it?",
-    "🌤️ What small truth helps you breathe a little easier right now?"
+    "👻 Did they disappear all of a sudden, or did things fade slowly?",
+    "🧠 Are you stuck wondering why they went silent?",
+    "💬 Did you try to reach out after they ghosted you? What happened?",
+    "📉 Has this made you feel like you're not good enough?",
+    "🔎 Are you blaming yourself for something you don’t understand?",
+    "🌪️ Does the lack of answers make it harder to let go?",
+    "🛑 If you could say something to them now, what would it be?",
+    "📱 Does seeing them online or on social media bother you?",
+    "🧭 What would closure look like, even if they never give it?",
+    "🌤️ What’s one small truth or thought that gives you a little peace?"
 ]
 
 replies = [
-    "Ghosting feels like emotional theft. You deserved better communication.",
-    "The brain craves reasons. But silence doesn’t mean it was your fault.",
-    "Reaching out shows your heart — their response shows their character.",
-    "Your value isn’t tied to someone else’s absence.",
-    "You’re not the reason they vanished. That’s their unfinished work.",
-    "Closure isn’t something they give — it’s something you build.",
-    "Even imagined conversations help heal. Speak your truth.",
-    "Triggers are data, not weakness. Let’s use them gently.",
-    "You don’t need their words to move on. Your own voice is enough.",
-    "You’re healing in silence what they didn’t even face. That’s power."
+    "Ghosting feels like someone left the room without saying goodbye — it’s painful and unfair.",
+    "It’s okay to want answers, even if none come. You’re not wrong for wondering.",
+    "Reaching out was brave. If they didn’t respond, that’s about them — not you.",
+    "This doesn’t define your worth. Someone’s silence can’t decide your value.",
+    "You didn’t cause their silence. Sometimes people run from their own discomfort.",
+    "Letting go without answers is hard, but you still deserve peace.",
+    "Even if they’ll never hear it, saying it out loud can help you let go.",
+    "Seeing them online can reopen wounds. It’s okay to mute or take space.",
+    "Closure isn’t something they give. It’s something you create within yourself.",
+    "You’re moving forward, even in silence. That takes quiet strength."
 ]
 def get_question(step):
     return questions[step] if step < len(questions) else get_feedback_prompt()
