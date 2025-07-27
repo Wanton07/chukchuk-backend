@@ -174,13 +174,18 @@ def incoming():
         if len(user_message.strip()) <= 2 and user_message.lower() not in ["yes", "no", "maybe", "idk", "ok"]:
             response.message("🐰 Hmm, I didn’t quite catch that. Want to continue or choose another path? Just reply again.")
             return str(response)
+        flow_module = flows[state["type"]][1]
+        reply = flow_module.replies[state["step"]] if state["step"] < len(flow_module.replies) else None
+
+        if reply:
+            response.message(reply)
+
         advance_step(user_id, user_message)
-        next_question = flows[state["type"]][1].get_question(state["step"])
+        next_question = flow_module.get_question(state["step"])
 
         if next_question:
             response.message(next_question)
         else:
-            # After 10 steps, prompt for journal
             response.message(
                 "🐰 You’ve completed this clarity path.\nIf you’d like, write a few lines about how you're feeling now. I’ll reflect it back gently."
             )
