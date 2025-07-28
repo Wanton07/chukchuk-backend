@@ -19,7 +19,33 @@ from state import (
     set_journal,
     get_full_session
 )
+
 from emotion import detect_emotion
+
+# --- Language detection helper ---
+def detect_language(text):
+    try:
+        prompt = (
+            f"What language is this message written in?\n"
+            f"Message: {text}\n\n"
+            "Reply only with one word: English, Hindi, Hinglish, or Mixed."
+        )
+        completion = openai.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}]
+        )
+        result = completion.choices[0].message.content.strip().lower()
+        if "hindi" in result:
+            return "hindi"
+        elif "hinglish" in result:
+            return "hinglish"
+        elif "mixed" in result:
+            return "mixed"
+        else:
+            return "english"
+    except Exception as e:
+        print("⚠️ Language detection failed:", e)
+        return "english"
 
 from flows import toxic, bigone, divorce, unrequited, betrayal, situational, ghosted, notsure, test
 
@@ -142,6 +168,9 @@ def incoming():
             start_conversation(user_id, user_message)
             emotion = detect_emotion(user_message)
             set_emotion(user_id, emotion)
+            lang = detect_language(user_message)
+            state = get_state(user_id) or {}
+            state["lang"] = lang
             question = flow_module.get_question(0)
             response.message(f"Okay, we’ll take it slow 🐰\nLet’s start your *{flow_title}* flow.\n\n{question}")
         else:
@@ -179,7 +208,17 @@ def incoming():
         advance_step(user_id, user_message)
         updated_state = get_state(user_id)
 
-        reply = flow_module.replies[updated_state["step"] - 1] if updated_state["step"] - 1 < len(flow_module.replies) else None
+        step_index = updated_state["step"] - 1
+        lang = state.get("lang", "english")
+
+        if step_index < len(flow_module.replies):
+            if lang == "hindi" and hasattr(flow_module, "replies_hindi"):
+                reply = flow_module.replies_hindi[step_index]
+            else:
+                reply = flow_module.replies[step_index]
+        else:
+            reply = None
+
         next_question = flow_module.get_question(updated_state["step"])
 
         if reply:
