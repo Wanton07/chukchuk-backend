@@ -168,9 +168,6 @@ def incoming():
             start_conversation(user_id, user_message)
             emotion = detect_emotion(user_message)
             set_emotion(user_id, emotion)
-            lang = detect_language(user_message)
-            state = get_state(user_id) or {}
-            state["lang"] = lang
             question = flow_module.get_question(0)
             response.message(f"Okay, we’ll take it slow 🐰\nLet’s start your *{flow_title}* flow.\n\n{question}")
         else:
@@ -208,17 +205,7 @@ def incoming():
         advance_step(user_id, user_message)
         updated_state = get_state(user_id)
 
-        step_index = updated_state["step"] - 1
-        lang = state.get("lang", "english")
-
-        if step_index < len(flow_module.replies):
-            if lang == "hindi" and hasattr(flow_module, "replies_hindi"):
-                reply = flow_module.replies_hindi[step_index]
-            else:
-                reply = flow_module.replies[step_index]
-        else:
-            reply = None
-
+        reply = flow_module.replies[updated_state["step"] - 1] if updated_state["step"] - 1 < len(flow_module.replies) else None
         next_question = flow_module.get_question(updated_state["step"])
 
         if reply:
