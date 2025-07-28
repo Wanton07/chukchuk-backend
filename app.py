@@ -226,6 +226,12 @@ Journal:
                     "🐰 Real talk time: Let’s unpack this 💬"
                 )
             response.message(f"🐰 Here's a soft reflection:\n\n{summary}")
+            response.message(
+                "🐰 Before we say goodbye for now, how did this conversation feel for you?\n"
+                "A. I feel lighter 🙏\n"
+                "B. I still feel confused 🌀\n"
+                "C. I want to talk to a human 💬"
+            )
         except Exception as e:
             summary = "🐰 I read that. Just a small glitch while summarizing, but I’ve noted what you wrote 🧠"
             tone = "Unknown"
@@ -233,6 +239,12 @@ Journal:
             full_session = get_full_session(user_id)
             full_session["tone"] = tone
             response.message(summary)
+            response.message(
+                "🐰 Before we say goodbye for now, how did this conversation feel for you?\n"
+                "A. I feel lighter 🙏\n"
+                "B. I still feel confused 🌀\n"
+                "C. I want to talk to a human 💬"
+            )
 
         # Log full session to Supabase and Google Sheets as backup
         try:
