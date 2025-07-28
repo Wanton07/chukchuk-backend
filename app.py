@@ -205,7 +205,15 @@ def incoming():
         advance_step(user_id, user_message)
         updated_state = get_state(user_id)
 
-        reply = flow_module.replies[updated_state["step"] - 1] if updated_state["step"] - 1 < len(flow_module.replies) else None
+        # Dynamically detect language on every user message
+        message_lang = detect_language(user_message)
+        step_idx = updated_state["step"] - 1
+
+        if message_lang in ["hindi", "hinglish"] and hasattr(flow_module, "replies_hindi"):
+            reply = flow_module.replies_hindi[step_idx] if step_idx < len(flow_module.replies_hindi) else None
+        else:
+            reply = flow_module.replies[step_idx] if step_idx < len(flow_module.replies) else None
+
         next_question = flow_module.get_question(updated_state["step"])
 
         if reply:
