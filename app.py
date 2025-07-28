@@ -175,13 +175,15 @@ def incoming():
             response.message("🐰 Hmm, I didn’t quite catch that. Want to continue or choose another path? Just reply again.")
             return str(response)
         flow_module = flows[state["type"]][1]
-        reply = flow_module.replies[state["step"]] if state["step"] < len(flow_module.replies) else None
+
+        advance_step(user_id, user_message)
+        updated_state = get_state(user_id)
+
+        reply = flow_module.replies[updated_state["step"] - 1] if updated_state["step"] - 1 < len(flow_module.replies) else None
+        next_question = flow_module.get_question(updated_state["step"])
 
         if reply:
             response.message(reply)
-
-        advance_step(user_id, user_message)
-        next_question = flow_module.get_question(state["step"])
 
         if next_question:
             response.message(next_question)
