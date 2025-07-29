@@ -207,6 +207,21 @@ def incoming():
 
         # Dynamically detect language on every user message
         message_lang = detect_language(user_message)
+
+        # Inform users if they're using a non-English language
+        if updated_state["step"] == 1 and message_lang in ["hindi", "hinglish", "mixed"]:
+            response.message(
+                "🐰 मुझे दिख रहा है कि आपने हिंदी या हिंग्लिश में जवाब दिया है।\n"
+                "अभी के लिए, मैं केवल *English* में जवाब दे सकता हूँ — लेकिन बहुत जल्द हम आपकी भाषा में भी उपलब्ध होंगे 💙\n"
+                "_You can continue replying in English for now._"
+            )
+        elif updated_state["step"] == 1 and message_lang not in ["english", "hindi", "hinglish", "mixed"]:
+            response.message(
+                "🐰 I noticed you’re using a language other than English.\n"
+                "For now, I can only reply in *English* — but soon we’ll be supporting more languages 💙\n"
+                "Please continue in English so I can help you better."
+            )
+
         step_idx = updated_state["step"] - 1
 
         if message_lang in ["hindi", "hinglish"] and hasattr(flow_module, "replies_hindi"):
