@@ -130,6 +130,7 @@ def incoming():
             traceback.print_exc()
             print("❌ Supabase feedback logging failed:", e)
         response.message(response_text)
+        reset_state(user_id)
         return str(response)
 
     if user_message.lower() == "privacy":
@@ -233,15 +234,13 @@ def incoming():
 
         next_question = flow_module.get_question(updated_state["step"])
 
-        if reply:
+        if reply and next_question:
             response.message(reply)
-
-        if next_question:
             response.message(next_question)
-        else:
-            response.message(
-                "🐰 You’ve completed this clarity path.\nIf you’d like, write a few lines about how you're feeling now. I’ll reflect it back gently."
-            )
+        elif reply:
+            response.message(reply)
+        elif next_question:
+            response.message(next_question)
         return str(response)
 
     # Journal response (after last question in flow)
