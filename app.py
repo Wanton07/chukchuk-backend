@@ -17,7 +17,8 @@ from state import (
     reset_state,
     set_emotion,
     set_journal,
-    get_full_session
+    get_full_session,
+    set_privacy_shown
 )
 
 from emotion import detect_emotion
@@ -165,6 +166,15 @@ def incoming():
 
     state = get_state(user_id)
 
+    # Privacy reminder (show once per flow)
+    if state and not state.get("privacy_shown"):
+        from state import set_privacy_shown
+        response.message(
+            "🔒 *Your Privacy Reminder*\nEverything you share with ChukChuk stays between us. We do not store any personal identifiers, and your reflections are private.\nType `delete` anytime to clear your session."
+        )
+        set_privacy_shown(user_id)
+        return str(response)
+
     if not state:
         if user_message in flows:
             flow_title, flow_module = flows[user_message]
@@ -199,34 +209,37 @@ def incoming():
         max_steps = 10
 
     if state["step"] < max_steps:
-        # Simple invalid input fallback filter
-        if len(user_message.strip()) <= 2 and user_message.lower() not in ["yes", "no", "maybe", "idk", "ok"]:
-            response.message("🐰 Hmm, I didn’t quite catch that. Want to continue or choose another path? Just reply again.")
-            return str(response)
         flow_module = flows[state["type"]][1]
 
         advance_step(user_id, user_message)
         updated_state = get_state(user_id)
 
-        # Dynamically detect language on every user message
+        # Dynamically detect language for every message
         message_lang = detect_language(user_message)
 
-        # Inform users if they're using a non-English language
-        if updated_state["step"] == 1 and message_lang in ["hindi", "hinglish", "mixed"]:
-            response.message(
-                "🐰 मुझे दिख रहा है कि आपने हिंदी या हिंग्लिश में जवाब दिया है।\n"
-                "अभी के लिए, मैं केवल *English* में जवाब दे सकता हूँ — लेकिन बहुत जल्द हम आपकी भाषा में भी उपलब्ध होंगे 💙\n"
-                "_You can continue replying in English for now._"
-            )
-        elif updated_state["step"] == 1 and message_lang not in ["english", "hindi", "hinglish", "mixed"]:
-            response.message(
-                "🐰 I noticed you’re using a language other than English.\n"
-                "For now, I can only reply in *English* — but soon we’ll be supporting more languages 💙\n"
-                "Please continue in English so I can help you better."
-            )
+        # Send notice *only once per flow* (at step 1)
+        if updated_state["step"] == 1:
+            if message_lang in ["hindi", "hinglish", "mixed"]:
+                response.message(
+                    "🐰 मुझे दिख रहा है कि आपने हिंदी या हिंग्लिश में जवाब दिया है।\n"
+                    "अभी के लिए, मैं केवल *English* में जवाब दे सकता हूँ — लेकिन बहुत जल्द हम आपकी भाषा में भी उपलब्ध होंगे 💙\n"
+                    "_You can continue replying in English for now._"
+                )
+            elif message_lang not in ["english", "hindi", "hinglish", "mixed"]:
+                response.message(
+                    "🐰 I noticed you’re using a language other than English.\n"
+                    "For now, I can only reply in *English* — but soon we’ll be supporting more languages 💙\n"
+                    "Please continue in English so I can help you better."
+                )
+
+        # Treat any gibberish input (based on character content) as fallback
+        if not user_message.isascii() or len(user_message.strip()) < 2:
+            response.message("🐰 Hmm, I didn’t quite catch that. Want to continue or choose another path? Just reply again.")
+            return str(response)
 
         step_idx = updated_state["step"] - 1
 
+        # Language-specific reply
         if message_lang in ["hindi", "hinglish"] and hasattr(flow_module, "replies_hindi"):
             reply = flow_module.replies_hindi[step_idx] if step_idx < len(flow_module.replies_hindi) else None
         else:
