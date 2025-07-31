@@ -122,7 +122,9 @@ def incoming():
                 "drop_off_point": False,
                 "final_mood_emoji": "",
                 "comments": "",
-                "created_at": datetime.now().isoformat()
+                "created_at": datetime.now().isoformat(),
+                "attempt_number": state.get("attempt", 1),
+                "restarted_flow": state.get("restarted", False)
             }).execute()
         except Exception as e:
             traceback.print_exc()
@@ -246,14 +248,35 @@ def incoming():
     if state["journal"] == "":
         set_journal(user_id, user_message)
 
-        summary_prompt = f"""Summarize this journal with 3 calming points and identify the emotional tone (e.g., hopeful, regretful, confused, angry, peaceful). 
-1. Validate the feelings.
-2. Reflect one key theme.
-3. Offer a non-judgmental insight.
-4. Tone (one word): ?
+        summary_prompt = f"""You are a compassionate reflection assistant for someone who just finished journaling after a breakup.
+
+Your job is to gently reflect their feelings using this structure:
+
+1. **Emotion Detection**: Identify the main emotion or emotional state expressed in the journal. (e.g., lonely, regretful, anxious)
+2. **Validation**: Validate that this feeling is okay to have and normal in the healing process.
+3. **Key Theme**: Identify one insight or pattern that shows up in the journal.
+4. **Gentle Insight**: Offer a soft, non-judgmental insight that helps them feel a bit clearer or more hopeful.
+5. **Closure Reminder**: Remind them that privacy is respected, and they are not alone.
+
+Format your reply like this:
+
+🐰 You’re feeling [emotion] right now — and that’s completely valid.
+
+1. It’s okay to feel [emotion]. These feelings are part of your healing.
+2. One thing that stands out is: [insert theme].
+3. Here’s a gentle thought: [insert insight].
+
+🔒 Your journal stays private with me. You’re not alone — and I’m proud of you for opening up.
+
+Then end with:
+🐰 Before we say goodbye for now, how did this conversation feel for you?
+A. I feel lighter 🙏
+B. I still feel confused 🌀
+C. I want to talk to a human 💬
 
 Journal:
-{user_message}"""
+{user_message}
+"""
 
         try:
             completion = openai.chat.completions.create(
@@ -261,30 +284,18 @@ Journal:
                 messages=[{"role": "user", "content": summary_prompt}]
             )
             summary = completion.choices[0].message.content.strip()
-            lines = summary.splitlines()
-            tone_line = next((line for line in lines if "Tone" in line), "")
-            tone = tone_line.split(":")[-1].strip() if ":" in tone_line else "Unknown"
-            summary = "\n".join([line for line in lines if "Tone" not in line]).strip()
-            # Store the tone in the session for logging
+            # Extract emotion tone (if we still want to log it)
+            tone_line = next((line for line in summary.splitlines() if "You’re feeling" in line), "")
+            if "feeling" in tone_line:
+                tone = tone_line.split("feeling")[1].split("right")[0].strip().lower()
+            else:
+                tone = "Unknown"
             full_session = get_full_session(user_id)
             full_session["tone"] = tone
-            # Gen Z tone customization
-            if tone.lower() in ["confused", "anxious", "overwhelmed", "stressed", "lost", "numb"]:
-                summary = summary.replace(
-                    "🐰 Here's a soft reflection:",
-                    "🐰 Real talk time: Let’s unpack this 💬"
-                )
-            response.message(f"🐰 Here's a soft reflection:\n\n{summary}")
-            response.message(
-                "🐰 Before we say goodbye for now, how did this conversation feel for you?\n"
-                "A. I feel lighter 🙏\n"
-                "B. I still feel confused 🌀\n"
-                "C. I want to talk to a human 💬"
-            )
+            response.message(summary)
         except Exception as e:
             summary = "🐰 I read that. Just a small glitch while summarizing, but I’ve noted what you wrote 🧠"
             tone = "Unknown"
-            # Still try to log the tone as "Unknown"
             full_session = get_full_session(user_id)
             full_session["tone"] = tone
             response.message(summary)
@@ -321,7 +332,7 @@ Journal:
             full_session["journal"],
             summary,
             full_session["tone"],
-            datetime.now().strftime("%Y-%m-%d")
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ])
         reset_state(user_id)
         return str(response)
